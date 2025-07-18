@@ -33,7 +33,7 @@
                         </form>                    
                     </div>
                     <div class="mt-4 text-center">
-                        <p>Have an account? <a  href="login.html">Login</a></p>
+                        <p>Have an account? <a  href="{{ route('login') }}">Login</a></p>
                     </div>
                 </div>
             </div>
@@ -120,7 +120,8 @@
                             .siblings("#error")
                             .removeClass('invalid-feedback')
                             .html('')
-                        
+                            
+                            window.location.href = "{{ route('login') }}";
                         }
 
                     }

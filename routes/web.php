@@ -11,3 +11,4 @@ Route::get('/contact', [HomeController::class, 'contact'])->name("contact");
 Route::get('/', [HomeController::class, 'index'])->name("home");
 Route::get('/account/register', [AccountController::class, 'registration'])->name("registration");
 Route::post('/account/submit-register', [AccountController::class, 'submitRegistration'])->name("submitRegistration");
+Route::get('/account/login', [AccountController::class, 'login'])->name("login");

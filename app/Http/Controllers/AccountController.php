@@ -16,8 +16,8 @@ class AccountController extends Controller
     function submitRegistration (Request $request) {
         $validator = Validator::make($request->all(),
             [
-            'name'=>'required',
-            'email'=>'required|email',
+            'name'=>'required|unique:users,name',
+            'email'=>'required|email|unique:users,email',
             'password'=>'required|min:5|same:confirm_password',
             'confirm_password'=>'required',
             ]
@@ -63,7 +63,7 @@ class AccountController extends Controller
     }
 
     function login () {
-        
+        return view('front.account.login');
     }
 
 }
