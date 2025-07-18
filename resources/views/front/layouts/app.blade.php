@@ -7,6 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, user-scalable=no" />
 	<meta name="HandheldFriendly" content="True" />
 	<meta name="pinterest" content="nopin" />
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}" />
 	<!-- Fav Icon -->
@@ -38,7 +39,7 @@
 
 @yield('main')
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -60,7 +61,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> --}}
 
 <footer class="bg-dark py-3 bg-2">
 <div class="container">
@@ -74,5 +75,14 @@
 <script src="{{ asset('assets/js/lazyload.17.6.0.min.js') }}"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
 
+<script>
+	$.ajaxSetup({
+	headers: {
+		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	}
+	});
+</script>
+
+@yield('customJs')
 </body>
 </html>
