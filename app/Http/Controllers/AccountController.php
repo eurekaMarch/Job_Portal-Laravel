@@ -4,22 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
-    function registration () {
+    function registration()
+    {
         return view('front.account.registration');
     }
 
-    function submitRegistration (Request $request) {
-        $validator = Validator::make($request->all(),
+    function submitRegistration(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
             [
-            'name'=>'required|unique:users,name',
-            'email'=>'required|email|unique:users,email',
-            'password'=>'required|min:5|same:confirm_password',
-            'confirm_password'=>'required',
+                'name' => 'required|unique:users,name',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:5|same:confirm_password',
+                'confirm_password' => 'required',
             ]
             // ,[
             // 'name.required'=>'กรุณาระบุข้อมูล', 
@@ -38,9 +42,9 @@ class AccountController extends Controller
             // $user->save();
 
             $data = [
-            'name' =>$request->name,
-            'email' =>$request->email,
-            'password' =>Hash::make($request->password),
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
             ];
 
             User::create($data);
@@ -51,19 +55,50 @@ class AccountController extends Controller
                 'status' => true,
                 'errors' => [],
             ]);
-           
         } else {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors(),
             ]);
         }
-
-
     }
 
-    function login () {
+    function login()
+    {
         return view('front.account.login');
     }
 
+    function authenticate(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'email' => 'required|email',
+                'password' => 'required|min:5',
+            ]
+        );
+
+        if ($validator->passes()) {
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                return redirect()->route('profile');
+            } else {
+                return redirect()->route('login')->with('error', 'Email/Password is incorrect');
+            }
+        } else {
+            return redirect()->route('login')
+                ->withErrors($validator)
+                ->withInput($request->only('email'));
+        }
+    }
+
+    function profile()
+    {
+        return view('front.account.profile');
+    }
+
+    function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login');
+    }
 }
