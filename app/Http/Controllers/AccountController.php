@@ -20,7 +20,7 @@ class AccountController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|unique:users,name',
+                'name' => 'required|min:5|max:20|unique:users,name',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:5|same:confirm_password',
                 'confirm_password' => 'required',
@@ -93,12 +93,62 @@ class AccountController extends Controller
 
     function profile()
     {
-        return view('front.account.profile');
+        $id = Auth::user()->id;
+        $user = User::find($id);
+
+        return view('front.account.profile', [
+            'user' =>  $user,
+        ]);
     }
 
     function logout()
     {
         Auth::logout();
         return redirect()->route('login');
+    }
+
+    function updateProfile(Request $request)
+    {
+        $id = Auth::user()->id;
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|min:5|max:20',
+                'email' => 'required|email|unique:users,email,' . $id . ',id',
+            ]
+        );
+
+
+        if ($validator->passes()) {
+            // การใช้ update แบบ save นี้จะไม่ต้องเพิ่ม fillable ใน model
+            $user = User::find($id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->designation = $request->designation;
+            $user->mobile = $request->mobile;
+            $user->save();
+
+            // การใช้ update แบบนี้จะต้องเพิ่ม fillable ใน model ด้วย
+            // $data = [
+            //     'name' => $request->name,
+            //     'email' => $request->email,
+            //     'designation' => $request->designation,
+            //     'mobile' => $request->mobile
+            // ];
+
+            // User::find($id)->update($data);
+
+            session()->flash('success', 'Profile updated successfully.');
+
+            return response()->json([
+                'status' => true,
+                'errors' => [],
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ]);
+        }
     }
 }
