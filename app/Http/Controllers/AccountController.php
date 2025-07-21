@@ -131,7 +131,7 @@ class AccountController extends Controller
             $user->mobile = $request->mobile;
             $user->save();
 
-            // การใช้ update แบบนี้จะต้องเพิ่ม fillable ใน model ด้วย
+            // การใช้ update แบบ find()จะต้องเพิ่ม fillable ใน model ด้วย
             // $data = [
             //     'name' => $request->name,
             //     'email' => $request->email,
@@ -181,11 +181,14 @@ class AccountController extends Controller
 
             //delete old pic
             File::delete(public_path("/profile_pic/thumb/")  . Auth::user()->image);
-            File::delete(public_path("/profile_pic/")  . Auth::user()->image);
+            File::delete(public_path("/profile_pic/") . Auth::user()->image);
 
             $data = [
                 'image' => $imageName,
             ];
+
+            // การใช้ update แบบ find()จะต้องเพิ่ม fillable ใน model ด้วย
+            // User::find($id)->update($data);
 
             User::where('id', $id)->update($data);
 
