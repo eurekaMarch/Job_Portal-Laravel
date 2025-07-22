@@ -142,6 +142,7 @@ class AccountController extends Controller
             // การใช้ update แบบ find()จะต้องเพิ่ม fillable ใน model ด้วย
             // User::find($id)->update($data);
 
+            // การใช้ update แบบ where นี้จะไม่ต้องเพิ่ม fillable ใน model
             User::where('id', $id)->update($data);
 
             session()->flash('success', 'Profile updated successfully.');
