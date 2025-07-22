@@ -19,10 +19,10 @@ return new class extends Migration
             $table->integer('vacancy');
             $table->string('salary')->nullable();
             $table->string('location');
-            $table->text('description')->nullable();
+            $table->text('description');
             $table->text('benefits')->nullable();
             $table->text('responsibility')->nullable();
-            $table->text('qulifications')->nullable();
+            $table->text('qualifications')->nullable();
             $table->text('keywords')->nullable();
             $table->string('experience');
             $table->string('company_name');

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Job;
+use App\Models\JobType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,7 +53,7 @@ class AccountController extends Controller
                 'password' => Hash::make($request->password),
             ];
 
-            User::create($data);
+            User::insert($data);
 
             session()->flash('success', 'You have registered successfully.');
 
@@ -210,5 +213,77 @@ class AccountController extends Controller
                 'errors' => $validator->errors(),
             ]);
         }
+    }
+
+    function createJob()
+    {
+        $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
+        $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
+
+        return view('front.account.job.create', [
+            'categories' => $categories,
+            'jobTypes' => $jobTypes,
+        ]);
+    }
+
+    function saveJob(Request $request)
+    {
+        $id = Auth::user()->id;
+
+        $rules = [
+            'title' => 'required|min:5|max:200',
+            'category' => 'required',
+            'jobType' => 'required',
+            'vacancy' => 'required|integer',
+            'location' => 'required|max:50',
+            'description' => 'required',
+            'experience' => 'required',
+            'company_name' => 'required|min:3|max:75',
+        ];
+
+        $validator = Validator::make(
+            $request->all(),
+            $rules
+        );
+
+        if ($validator->passes()) {
+            $data = [
+                'title' => $request->title,
+                'category_id' => $request->category,
+                'job_type_id' => $request->jobType,
+                'user_id' => $id,
+                'vacancy' => $request->vacancy,
+                'salary' => $request->salary,
+                'location' => $request->location,
+                'description' => $request->description,
+                'benefits' => $request->benefits,
+                'responsibility' => $request->responsibility,
+                'qualifications' => $request->qualifications,
+                'keywords' => $request->keywords,
+                'experience' => $request->experience,
+                'company_name' => $request->company_name,
+                'company_location' => $request->company_location,
+                'company_website' => $request->company_website,
+            ];
+
+            Job::insert($data);
+
+            session()->flash('success', 'Job added successfully.');
+
+            return response()->json([
+                'status' => true,
+                'errors' => [],
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ]);
+        }
+    }
+
+    function myJobs()
+    {
+        return view('front.account.job.my-jobs');
     }
 }
