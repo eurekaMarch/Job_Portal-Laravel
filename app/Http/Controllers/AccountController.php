@@ -124,22 +124,25 @@ class AccountController extends Controller
 
         if ($validator->passes()) {
             // การใช้ update แบบ save นี้จะไม่ต้องเพิ่ม fillable ใน model
-            $user = User::find($id);
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->designation = $request->designation;
-            $user->mobile = $request->mobile;
-            $user->save();
+            // $user = User::find($id);
+            // $user->name = $request->name;
+            // $user->email = $request->email;
+            // $user->designation = $request->designation;
+            // $user->mobile = $request->mobile;
+            // $user->save();
+
+
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'designation' => $request->designation,
+                'mobile' => $request->mobile
+            ];
 
             // การใช้ update แบบ find()จะต้องเพิ่ม fillable ใน model ด้วย
-            // $data = [
-            //     'name' => $request->name,
-            //     'email' => $request->email,
-            //     'designation' => $request->designation,
-            //     'mobile' => $request->mobile
-            // ];
-
             // User::find($id)->update($data);
+
+            User::where('id', $id)->update($data);
 
             session()->flash('success', 'Profile updated successfully.');
 
