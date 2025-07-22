@@ -177,10 +177,12 @@ class AccountController extends Controller
 
             // create small thumnail
             $sourcePath = public_path("/profile_pic/" . $imageName);
+
             $manager = new ImageManager(Driver::class);
             $image = $manager->read($sourcePath);
-            $image->cover(150, 150);
-            $image->toPng()->save(public_path("/profile_pic/thumb/") . $imageName);
+
+            $image->cover(150, 150)->save(public_path("/profile_pic/thumb/") . $imageName);
+
 
             //delete old pic
             File::delete(public_path("/profile_pic/thumb/")  . Auth::user()->image);
