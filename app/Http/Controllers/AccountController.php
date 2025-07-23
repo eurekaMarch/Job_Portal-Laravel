@@ -41,19 +41,11 @@ class AccountController extends Controller
 
 
         if ($validator->passes()) {
-            // $user = new User();
-            // $user->name = $request->name;
-            // $user->email = $request->email;
-            // $user->password = Hash::make($request->password);
-            // $user->save();
-
-            $data = [
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ];
-
-            User::insert($data);
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->save();
 
             session()->flash('success', 'You have registered successfully.');
 
@@ -247,26 +239,26 @@ class AccountController extends Controller
         );
 
         if ($validator->passes()) {
-            $data = [
-                'title' => $request->title,
-                'category_id' => $request->category,
-                'job_type_id' => $request->jobType,
-                'user_id' => $id,
-                'vacancy' => $request->vacancy,
-                'salary' => $request->salary,
-                'location' => $request->location,
-                'description' => $request->description,
-                'benefits' => $request->benefits,
-                'responsibility' => $request->responsibility,
-                'qualifications' => $request->qualifications,
-                'keywords' => $request->keywords,
-                'experience' => $request->experience,
-                'company_name' => $request->company_name,
-                'company_location' => $request->company_location,
-                'company_website' => $request->company_website,
-            ];
+            $job = new Job();
 
-            Job::insert($data);
+            $job->title = $request->title;
+            $job->category_id = $request->category;
+            $job->job_type_id = $request->jobType;
+            $job->user_id = $id;
+            $job->vacancy = $request->vacancy;
+            $job->salary = $request->salary;
+            $job->location = $request->location;
+            $job->description = $request->description;
+            $job->benefits = $request->benefits;
+            $job->responsibility = $request->responsibility;
+            $job->qualifications = $request->qualifications;
+            $job->keywords = $request->keywords;
+            $job->experience = $request->experience;
+            $job->company_name = $request->company_name;
+            $job->company_location = $request->company_location;
+            $job->company_website = $request->company_website;
+            $job->save();
+
 
             session()->flash('success', 'Job added successfully.');
 
@@ -284,6 +276,11 @@ class AccountController extends Controller
 
     function myJobs()
     {
-        return view('front.account.job.my-jobs');
+        $id = Auth::user()->id;
+        $jobs = Job::where('user_id', $id)->with(['jobType'])->paginate(10);
+
+        return view('front.account.job.my-jobs', [
+            'jobs' => $jobs,
+        ]);
     }
 }
