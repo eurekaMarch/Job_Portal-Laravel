@@ -220,8 +220,6 @@ class AccountController extends Controller
 
     function saveJob(Request $request)
     {
-        $id = Auth::user()->id;
-
         $rules = [
             'title' => 'required|min:5|max:200',
             'category' => 'required',
@@ -244,7 +242,7 @@ class AccountController extends Controller
             $job->title = $request->title;
             $job->category_id = $request->category;
             $job->job_type_id = $request->jobType;
-            $job->user_id = $id;
+            $job->user_id = Auth::user()->id;
             $job->vacancy = $request->vacancy;
             $job->salary = $request->salary;
             $job->location = $request->location;
@@ -282,5 +280,103 @@ class AccountController extends Controller
         return view('front.account.job.my-jobs', [
             'jobs' => $jobs,
         ]);
+    }
+
+    function editJob($jobId)
+    {
+        $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
+        $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
+
+        $job = Job::where([
+            'user_id' => Auth::user()->id,
+            'id' => $jobId,
+        ])->first();
+
+        if ($job == null) {
+            abort(404);
+        }
+
+        return view('front.account.job.edit', [
+            'categories' => $categories,
+            'jobTypes' => $jobTypes,
+            'job' => $job,
+        ]);
+    }
+
+    function updateJob(Request $request, $jobId)
+    {
+
+
+        $rules = [
+            'title' => 'required|min:5|max:200',
+            'category' => 'required',
+            'jobType' => 'required',
+            'vacancy' => 'required|integer',
+            'location' => 'required|max:50',
+            'description' => 'required',
+            'experience' => 'required',
+            'company_name' => 'required|min:3|max:75',
+        ];
+
+        $validator = Validator::make(
+            $request->all(),
+            $rules
+        );
+
+        if ($validator->passes()) {
+            // $job = new Job();
+
+            // $job->title = $request->title;
+            // $job->category_id = $request->category;
+            // $job->job_type_id = $request->jobType;
+            // $job->user_id = $id;
+            // $job->vacancy = $request->vacancy;
+            // $job->salary = $request->salary;
+            // $job->location = $request->location;
+            // $job->description = $request->description;
+            // $job->benefits = $request->benefits;
+            // $job->responsibility = $request->responsibility;
+            // $job->qualifications = $request->qualifications;
+            // $job->keywords = $request->keywords;
+            // $job->experience = $request->experience;
+            // $job->company_name = $request->company_name;
+            // $job->company_location = $request->company_location;
+            // $job->company_website = $request->company_website;
+            // $job->save();
+
+            $data = [
+                'title' => $request->title,
+                'category_id' => $request->category,
+                'job_type_id' => $request->jobType,
+                'user_id' => Auth::user()->id,
+                'vacancy' => $request->vacancy,
+                'salary' => $request->salary,
+                'location' => $request->location,
+                'description' => $request->description,
+                'benefits' => $request->benefits,
+                'responsibility' => $request->responsibility,
+                'qualifications' => $request->qualifications,
+                'keywords' => $request->keywords,
+                'experience' => $request->experience,
+                'company_name' => $request->company_name,
+                'company_location' => $request->company_location,
+                'company_website' => $request->company_website,
+            ];
+
+            Job::where('id', $jobId)->update($data);
+
+
+            session()->flash('success', 'Job updated successfully.');
+
+            return response()->json([
+                'status' => true,
+                'errors' => [],
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ]);
+        }
     }
 }
