@@ -166,9 +166,9 @@
             e.preventDefault();
 
             $("button[type='submit']").prop('disabled', true)
-
+             
             $.ajax({
-                url: "{{ route('updateJob', $job->id) }}",
+                url: "{{ route('saveJob') }}",
                 type: 'POST',
                 data: $("#createJobForm").serializeArray(),
                 dataType: 'json',
