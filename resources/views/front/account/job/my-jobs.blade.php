@@ -80,9 +80,10 @@
                                                                             class="fa fa-edit" aria-hidden="true"></i>
                                                                         Edit</a>
                                                                 </li>
-                                                                <li><a class="dropdown-item" href="#"><i
+                                                                <li><a class="dropdown-item"
+                                                                        onclick="deleteJob({{ $item->id }})"><i
                                                                             class="fa fa-trash" aria-hidden="true"></i>
-                                                                        Remove</a></li>
+                                                                        Delete</a></li>
                                                             </ul>
                                                         </div>
                                                     </td>
@@ -99,7 +100,24 @@
             </div>
         </div>
     </section>
+@endsection
 
 @section('customJs')
-@endsection
+    <script>
+        const deleteJob = (jobID) => {
+            if (confirm("Are you sure you want to delete?")) {
+                $.ajax({
+                    url: '{{ route('deleteJob') }}',
+                    type: 'POST',
+                    data: {
+                        jobID: jobID
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        window.location.href = "{{ route('myJobs') }}";
+                    }
+                })
+            }
+        }
+    </script>
 @endsection

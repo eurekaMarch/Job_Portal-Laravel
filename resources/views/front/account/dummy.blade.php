@@ -27,7 +27,7 @@
             </div>
         </div>
     </section>
+@endsection
 
 @section('customJs')
-@endsection
 @endsection

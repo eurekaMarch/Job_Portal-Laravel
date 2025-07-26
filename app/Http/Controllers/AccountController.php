@@ -324,26 +324,6 @@ class AccountController extends Controller
         );
 
         if ($validator->passes()) {
-            // $job = new Job();
-
-            // $job->title = $request->title;
-            // $job->category_id = $request->category;
-            // $job->job_type_id = $request->jobType;
-            // $job->user_id = $id;
-            // $job->vacancy = $request->vacancy;
-            // $job->salary = $request->salary;
-            // $job->location = $request->location;
-            // $job->description = $request->description;
-            // $job->benefits = $request->benefits;
-            // $job->responsibility = $request->responsibility;
-            // $job->qualifications = $request->qualifications;
-            // $job->keywords = $request->keywords;
-            // $job->experience = $request->experience;
-            // $job->company_name = $request->company_name;
-            // $job->company_location = $request->company_location;
-            // $job->company_website = $request->company_website;
-            // $job->save();
-
             $data = [
                 'title' => $request->title,
                 'category_id' => $request->category,
@@ -378,5 +358,28 @@ class AccountController extends Controller
                 'errors' => $validator->errors(),
             ]);
         }
+    }
+
+    function deleteJob(Request $request)
+    {
+        $job = Job::where([
+            'user_id' => Auth::user()->id,
+            'id' => $request->jobID,
+        ])->first();
+
+        if ($job == null) {
+            session()->flash('error', 'Either job deleted or not found.');
+            return response()->json([
+                'status' => true,
+            ]);
+        }
+
+        Job::where('id', $request->jobID)->delete();
+
+        session()->flash('success', 'Job deleted successfully.');
+
+        return response()->json([
+            'status' => true,
+        ]);
     }
 }

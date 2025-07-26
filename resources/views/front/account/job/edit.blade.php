@@ -173,6 +173,7 @@
             </div>
         </div>
     </section>
+@endsection
 
 @section('customJs')
     <script>
@@ -335,5 +336,4 @@
             })
         })
     </script>
-@endsection
 @endsection

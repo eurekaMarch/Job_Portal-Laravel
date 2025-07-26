@@ -159,6 +159,7 @@
             </div>
         </div>
     </section>
+@endsection
 
 @section('customJs')
     <script>
@@ -166,7 +167,7 @@
             e.preventDefault();
 
             $("button[type='submit']").prop('disabled', true)
-             
+
             $.ajax({
                 url: "{{ route('saveJob') }}",
                 type: 'POST',
@@ -321,5 +322,4 @@
             })
         })
     </script>
-@endsection
 @endsection
