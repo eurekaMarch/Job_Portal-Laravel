@@ -22,12 +22,14 @@
                     <div class="card border-0 shadow p-4">
                         <div class="mb-4">
                             <h2>Keywords</h2>
-                            <input type="text" placeholder="Keywords" class="form-control">
+                            <input type="text" name="keywords" id="keywords" placeholder="Keywords"
+                                class="form-control">
                         </div>
 
                         <div class="mb-4">
                             <h2>Location</h2>
-                            <input type="text" placeholder="Location" class="form-control">
+                            <input type="text" name="location" id="location" placeholder="Location"
+                                class="form-control">
                         </div>
 
                         <div class="mb-4">
@@ -48,7 +50,7 @@
                                 @foreach ($jobTypes as $item)
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" name="job_type" id="job_type-{{ $item->id }}"
-                                            type="checkbox" value="{{ $item->id }}" id="">
+                                            type="checkbox" value="{{ $item->id }}">
                                         <label class="form-check-label" for="">{{ $item->name }}</label>
                                     </div>
                                 @endforeach
@@ -112,14 +114,11 @@
                                 @else
                                     <p class="col-md-12">Jobs not Found</p>
                                 @endif
-
-
-
                             </div>
                         </div>
                     </div>
+                    {{ $jobs->links() }}
                 </div>
-
             </div>
         </div>
     </section>
