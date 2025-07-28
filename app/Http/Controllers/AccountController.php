@@ -209,8 +209,8 @@ class AccountController extends Controller
 
     function createJob()
     {
-        $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
-        $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
+        $categories = Category::orderBy('name', 'ASC')->where('status', true)->get();
+        $jobTypes = JobType::orderBy('name', 'ASC')->where('status', true)->get();
 
         return view('front.account.job.create', [
             'categories' => $categories,
@@ -275,7 +275,7 @@ class AccountController extends Controller
     function myJobs()
     {
         $id = Auth::user()->id;
-        $jobs = Job::where('user_id', $id)->with(['jobType'])->paginate(10);
+        $jobs = Job::where('user_id', $id)->with(['jobType'])->orderBy('created_at', 'DESC')->paginate(10);
 
         return view('front.account.job.my-jobs', [
             'jobs' => $jobs,
