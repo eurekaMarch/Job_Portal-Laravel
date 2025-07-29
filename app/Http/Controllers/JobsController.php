@@ -9,17 +9,55 @@ use Illuminate\Http\Request;
 
 class JobsController extends Controller
 {
-    function index()
+    function index(Request $request)
     {
         $categories = Category::orderBy('name', 'ASC')->where('status', true)->get();
         $jobTypes = JobType::orderBy('name', 'ASC')->where('status', true)->get();
-        $jobs = Job::where('status', true)->with(['jobType'])->orderBy('created_at', 'DESC')->paginate(9);
+        $jobs = Job::where('status', true);
 
+        if (!empty($request->keyword)) {
+            $jobs = $jobs->where(function ($query) use ($request) {
+                $query->orWhere('title', 'like', '%' . $request->keyword . '%');
+                $query->orWhere('keywords', 'like', '%' . $request->keyword . '%');
+            });
+        }
+
+        if (!empty($request->location)) {
+
+            $jobs = $jobs->where('location', 'like', '%' . $request->location . '%');
+        }
+
+        if (!empty($request->category)) {
+
+            $jobs = $jobs->where('category_id', $request->category);
+        }
+
+        $jobTypeArray = [];
+
+        if (!empty($request->jobType)) {
+            $jobTypeArray = explode(',', $request->jobType);
+
+            $jobs = $jobs->whereIn('job_type_id', $jobTypeArray);
+        }
+
+        if (!empty($request->experience)) {
+
+            $jobs = $jobs->where('experience', $request->experience);
+        }
+
+        $jobs = $jobs->with(['jobType']);
+
+        if ($request->sort === '1') {
+            $jobs = $jobs->orderBy('created_at', 'ASC')->paginate(9);
+        } else {
+            $jobs = $jobs->orderBy('created_at', 'DESC')->paginate(9);
+        }
 
         return view('front.jobs', [
             'categories' => $categories,
             'jobTypes' => $jobTypes,
             'jobs' => $jobs,
+            'jobTypeArray' => $jobTypeArray,
         ]);
     }
 }
