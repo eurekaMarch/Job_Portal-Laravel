@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\JobApplication;
 use App\Models\JobType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JobsController extends Controller
 {
@@ -74,6 +76,56 @@ class JobsController extends Controller
 
         return view('front.jobDetail', [
             'job' => $job,
+        ]);
+    }
+
+    function applyJob(Request $request)
+    {
+        $job = Job::where('id', $request->jobID)->first();
+
+        if ($job == null) {
+            session()->flash('error', 'Job does not exist.');
+            return response()->json([
+                'status' => true,
+                'message'  => 'Job does not exist.',
+            ]);
+        }
+
+        $employer_id = $job->user_id;
+
+        if ($employer_id == Auth::user()->id) {
+            session()->flash('error', 'You can not apply on your own job.');
+            return response()->json([
+                'status' => false,
+                'message'  => 'You can not apply on your own job.',
+            ]);
+        }
+
+        $jobApplictionCount = JobApplication::where([
+            'user_id' => Auth::user()->id,
+            'job_id' => $request->jobID,
+        ])->count();
+
+        if ($jobApplictionCount > 0) {
+            session()->flash('error', 'You already applied on this job.');
+            return response()->json([
+                'status' => false,
+                'message'  => 'You already applied on this job.',
+            ]);
+        }
+
+        $application = new JobApplication();
+        $application->job_id = $request->jobID;
+        $application->user_id = Auth::user()->id;
+        $application->employer_id = $employer_id;
+        $application->applied_date = now();
+        $application->save();
+
+        session()->flash('success', 'You have applied successfully.');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'You have applied successfully.',
         ]);
     }
 }
