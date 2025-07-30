@@ -284,8 +284,8 @@ class AccountController extends Controller
 
     function editJob($jobId)
     {
-        $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
-        $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
+        $categories = Category::orderBy('name', 'ASC')->where('status', true)->get();
+        $jobTypes = JobType::orderBy('name', 'ASC')->where('status', true)->get();
 
         $job = Job::where([
             'user_id' => Auth::user()->id,
@@ -305,8 +305,6 @@ class AccountController extends Controller
 
     function updateJob(Request $request, $jobId)
     {
-
-
         $rules = [
             'title' => 'required|min:5|max:200',
             'category' => 'required',

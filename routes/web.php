@@ -7,6 +7,7 @@ use App\Http\Controllers\JobsController;
 
 Route::get('/', [HomeController::class, 'index'])->name("home");
 Route::get('/jobs', [JobsController::class, 'index'])->name("jobs");
+Route::get('/jobs/detail/{jobId}', [JobsController::class, 'jobDetail'])->name("jobDetail");
 
 
 Route::group(['prefix' => 'account'], function () {

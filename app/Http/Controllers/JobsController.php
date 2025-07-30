@@ -60,4 +60,20 @@ class JobsController extends Controller
             'jobTypeArray' => $jobTypeArray,
         ]);
     }
+
+    function jobDetail($jobId)
+    {
+        $job = Job::where([
+            'id' => $jobId,
+            'status' => true,
+        ])->with(['jobType', 'category'])->first();
+
+        if ($job == null) {
+            abort(404);
+        }
+
+        return view('front.jobDetail', [
+            'job' => $job,
+        ]);
+    }
 }
