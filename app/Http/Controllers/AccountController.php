@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\JobApplication;
 use App\Models\JobType;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -275,7 +276,7 @@ class AccountController extends Controller
     function myJobs()
     {
         $id = Auth::user()->id;
-        $jobs = Job::where('user_id', $id)->with(['jobType'])->orderBy('created_at', 'DESC')->paginate(10);
+        $jobs = Job::where('user_id', $id)->with(['jobType', 'applications'])->orderBy('created_at', 'DESC')->paginate(10);
 
         return view('front.account.job.my-jobs', [
             'jobs' => $jobs,
@@ -375,6 +376,39 @@ class AccountController extends Controller
         Job::where('id', $request->jobID)->delete();
 
         session()->flash('success', 'Job deleted successfully.');
+
+        return response()->json([
+            'status' => true,
+        ]);
+    }
+
+    function myJobApplications()
+    {
+        $id = Auth::user()->id;
+        $jobApplications = JobApplication::where('user_id', $id)->with(['job', 'job.jobType', 'job.applications'])->paginate(10);
+
+        return view('front.account.job.my-job-applications', [
+            'jobApplications' => $jobApplications,
+        ]);
+    }
+
+    function removeJob(Request $request)
+    {
+        $jobApplications = JobApplication::where([
+            'user_id' => Auth::user()->id,
+            'id' => $request->id,
+        ])->first();
+
+        if ($jobApplications == null) {
+            session()->flash('error', 'Job application not found.');
+            return response()->json([
+                'status' => true,
+            ]);
+        }
+
+        JobApplication::where('id', $request->id)->delete();
+
+        session()->flash('success', 'Job application removed successfully.');
 
         return response()->json([
             'status' => true,
