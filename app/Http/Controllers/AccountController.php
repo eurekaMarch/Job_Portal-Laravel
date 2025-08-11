@@ -369,7 +369,7 @@ class AccountController extends Controller
         if ($job == null) {
             session()->flash('error', 'Either job deleted or not found.');
             return response()->json([
-                'status' => true,
+                'status' => false,
             ]);
         }
 
@@ -402,7 +402,7 @@ class AccountController extends Controller
         if ($jobApplications == null) {
             session()->flash('error', 'Job application not found.');
             return response()->json([
-                'status' => true,
+                'status' => false,
             ]);
         }
 
