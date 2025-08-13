@@ -33,5 +33,7 @@ Route::group(['prefix' => 'account'], function () {
         Route::post('/delete-job', [AccountController::class, 'deleteJob'])->name("deleteJob");
         Route::get('/my-job-applications', [AccountController::class, 'myJobApplications'])->name("myJobApplications");
         Route::post('/remove-job-application', [AccountController::class, 'removeJob'])->name("removeJob");
+        Route::get('/saved-jobs', [AccountController::class, 'savedJobs'])->name("savedJobs");
+        Route::post('/remove-saved-job', [AccountController::class, 'removeSavedJobs'])->name("removeSavedJobs");
     });
 });
