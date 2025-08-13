@@ -85,9 +85,12 @@ class JobsController extends Controller
             'job_id' => $jobId,
         ])->count() : 0;
 
+        $applications = JobApplication::where('job_id', $jobId)->with(['user'])->get();
+
         return view('front.jobDetail', [
             'job' => $job,
             'count' => $count,
+            'applications' => $applications,
         ]);
     }
 

@@ -96,7 +96,56 @@
                             </div>
                         </div>
                     </div>
+
+                    @if (Auth::user())
+                        @if (Auth::user()->id == $job->user_id)
+                            <div class="card shadow border-0 mt-4">
+                                <div class="job_details_header">
+                                    <div class="single_jobs white-bg d-flex justify-content-between">
+                                        <div class="jobs_left d-flex align-items-center">
+
+                                            <div class="jobs_conetent">
+
+                                                <h4>Applicants</h4>
+
+                                            </div>
+                                        </div>
+                                        <div class="jobs_right">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="descript_wrap white-bg">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Mobile</th>
+                                            <th>Applied Date</th>
+                                        </tr>
+
+                                        @if ($applications->isNotEmpty())
+                                            @foreach ($applications as $item)
+                                                <tr>
+                                                    <td>{{ $item->user->name }}</td>
+                                                    <td>{{ $item->user->email }}</td>
+                                                    <td>{{ $item->user->mobile }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->applied_date)->format('d M, Y') }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="5"> Applicants not found</td>
+                                            </tr>
+                                        @endif
+                                    </table>
+                                </div>
+                            </div>
+                        @endif
+                    @endif
                 </div>
+
                 <div class="col-md-4">
                     <div class="card shadow border-0">
                         <div class="job_sumary">
