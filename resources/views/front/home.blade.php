@@ -82,7 +82,7 @@
                                         <div class="card border-0 p-3 shadow mb-4 w-100 h-100 d-flex flex-column">
                                             <div class="card-body flex-grow-1 d-flex flex-column">
                                                 <h3 class="border-0 fs-5 pb-2 mb-0">{{ $item->title }}</h3>
-                                                <p>{{ Str::words($item->description, 5) }}</p>
+                                                <p>{{ Str::words(strip_tags($item->description), 5) }}</p>
                                                 <div class="bg-light p-3 border mt-auto d-flex flex-column justify-content-center"
                                                     style="min-height: 120px;">
                                                     <p class="mb-0">
@@ -129,7 +129,7 @@
                                         <div class="card border-0 p-3 shadow mb-4 w-100 h-100 d-flex flex-column">
                                             <div class="card-body flex-grow-1 d-flex flex-column">
                                                 <h3 class="border-0 fs-5 pb-2 mb-0">{{ $item->title }}</h3>
-                                                <p>{{ Str::words($item->description, 5) }}</p>
+                                                <p>{{ Str::words(strip_tags($item->description), 5) }}</p>
                                                 <div class="bg-light p-3 border mt-auto d-flex flex-column justify-content-center"
                                                     style="min-height: 120px;">
                                                     <p class="mb-0">

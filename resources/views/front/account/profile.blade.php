@@ -37,12 +37,12 @@
                                     <p id="error"></p>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="" class="mb-2">Designation*</label>
+                                    <label for="" class="mb-2">Designation</label>
                                     <input type="text" name="designation" id="designation" placeholder="Designation"
                                         value="{{ $user->designation }}" class="form-control">
                                 </div>
                                 <div class="mb-4">
-                                    <label for="" class="mb-2">Mobile*</label>
+                                    <label for="" class="mb-2">Mobile</label>
                                     <input type="text" name="mobile" id="mobile" placeholder="Mobile"
                                         value="{{ $user->mobile }}" class="form-control">
                                 </div>
@@ -54,24 +54,32 @@
                     </div>
 
                     <div class="card border-0 shadow mb-4">
-                        <div class="card-body p-4">
-                            <h3 class="fs-4 mb-1">Change Password</h3>
-                            <div class="mb-4">
-                                <label for="" class="mb-2">Old Password*</label>
-                                <input type="password" placeholder="Old Password" class="form-control">
+                        <form action="" id="changePasswordForm" name="changePasswordForm">
+                            <div class="card-body p-4">
+                                <h3 class="fs-4 mb-1">Change Password</h3>
+                                <div class="mb-4">
+                                    <label for="" class="mb-2">Old Password*</label>
+                                    <input type="password" id="old_password" name="old_password" placeholder="Old Password"
+                                        class="form-control">
+                                    <p id="errorPass"></p>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="" class="mb-2">New Password*</label>
+                                    <input type="password" id="new_password" name="new_password" placeholder="New Password"
+                                        class="form-control">
+                                    <p id="errorPass"></p>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="" class="mb-2">Confirm Password*</label>
+                                    <input type="password" id="confirm_password" name="confirm_password"
+                                        placeholder="Confirm Password" class="form-control">
+                                    <p id="errorPass"></p>
+                                </div>
                             </div>
-                            <div class="mb-4">
-                                <label for="" class="mb-2">New Password*</label>
-                                <input type="password" placeholder="New Password" class="form-control">
+                            <div class="card-footer  p-4">
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </div>
-                            <div class="mb-4">
-                                <label for="" class="mb-2">Confirm Password*</label>
-                                <input type="password" placeholder="Confirm Password" class="form-control">
-                            </div>
-                        </div>
-                        <div class="card-footer  p-4">
-                            <button type="button" class="btn btn-primary">Update</button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -126,6 +134,76 @@
                         } else {
                             $("#email").removeClass('is-invalid')
                                 .siblings("#error")
+                                .removeClass('invalid-feedback')
+                                .html('')
+                        }
+                    }
+                }
+            })
+        })
+
+        $("#changePasswordForm").submit(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '{{ route('updatePassword') }}',
+                type: 'POST',
+                data: $("#changePasswordForm").serializeArray(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status == true) {
+                        $("#old_password").removeClass('is-invalid')
+                            .siblings("#errorPass")
+                            .removeClass('invalid-feedback')
+                            .html('')
+
+                        $("#new_password").removeClass('is-invalid')
+                            .siblings("#errorPass")
+                            .removeClass('invalid-feedback')
+                            .html('')
+
+                        $("#confirm_password").removeClass('is-invalid')
+                            .siblings("#errorPass")
+                            .removeClass('invalid-feedback')
+                            .html('')
+
+                        window.location.href = "{{ route('profile') }}";
+
+                    } else {
+                        const errors = response.errors;
+
+                        if (errors.old_password) {
+                            $("#old_password").addClass('is-invalid')
+                                .siblings("#errorPass")
+                                .addClass('invalid-feedback')
+                                .html(errors.old_password)
+                        } else {
+                            $("#old_password").removeClass('is-invalid')
+                                .siblings("#errorPass")
+                                .removeClass('invalid-feedback')
+                                .html('')
+                        }
+
+                        if (errors.new_password) {
+                            $("#new_password").addClass('is-invalid')
+                                .siblings("#errorPass")
+                                .addClass('invalid-feedback')
+                                .html(errors.new_password)
+                        } else {
+                            $("#new_password").removeClass('is-invalid')
+                                .siblings("#errorPass")
+                                .removeClass('invalid-feedback')
+                                .html('')
+                        }
+
+                        if (errors.confirm_password) {
+                            $("#confirm_password").addClass('is-invalid')
+                                .siblings("#errorPass")
+                                .addClass('invalid-feedback')
+                                .html(errors.confirm_password)
+                        } else {
+                            $("#confirm_password").removeClass('is-invalid')
+                                .siblings("#errorPass")
                                 .removeClass('invalid-feedback')
                                 .html('')
                         }
