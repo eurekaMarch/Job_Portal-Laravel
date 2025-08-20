@@ -15,6 +15,10 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!$request->user()) {
+            return redirect()->route('home');
+        }
+
         if ($request->user()->role != 'admin') {
             session()->flash('error', 'You are not autherized to acess this page.');
             return redirect()->route('profile');
