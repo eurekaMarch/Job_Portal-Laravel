@@ -14,7 +14,7 @@ class UserController extends Controller
     {
         $users = User::orderBy('created_at', 'DESC')->paginate(10);
 
-        return view("admin.user.list", [
+        return view("admin.users.list", [
             'users' =>  $users,
         ]);
     }
@@ -22,7 +22,7 @@ class UserController extends Controller
     function edit($id)
     {
         $user = User::findOrFail($id);
-        return view("admin.user.edit", [
+        return view("admin.users.edit", [
             'user' =>  $user,
         ]);
     }

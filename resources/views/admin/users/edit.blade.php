@@ -8,7 +8,9 @@
                     <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-4">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Users</li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.users') }}">Users</a></li>
+                            <li class="breadcrumb-item active">Edit</li>
                         </ol>
                     </nav>
                 </div>
@@ -24,7 +26,7 @@
                         <div class="card-body card-form">
                             <form action="" id="userForm">
                                 <div class="card-body  p-4">
-                                    <h3 class="fs-4 mb-1">User/Edit</h3>
+                                    <h3 class="fs-4 mb-1">User / Edit</h3>
                                     <div class="mb-4">
                                         <label for="" class="mb-2">Name*</label>
                                         <input type="text" name="name" id="name" placeholder="Enter Name"
@@ -66,7 +68,7 @@
             e.preventDefault();
 
             $.ajax({
-                url: '{{ route('admin.update', $user->id) }}',
+                url: '{{ route('admin.users.update', $user->id) }}',
                 type: 'PUT',
                 data: $("#userForm").serializeArray(),
                 dataType: 'json',

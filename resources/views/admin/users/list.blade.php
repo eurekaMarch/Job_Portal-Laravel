@@ -8,6 +8,7 @@
                     <nav aria-label="breadcrumb" class=" rounded-3 p-3 mb-4">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item active">Users</li>
                         </ol>
                     </nav>
@@ -56,7 +57,7 @@
                                                             </button>
                                                             <ul class="dropdown-menu dropdown-menu-end">
                                                                 <li><a class="dropdown-item"
-                                                                        href="{{ route('admin.edit', $item->id) }}"><i
+                                                                        href="{{ route('admin.users.edit', $item->id) }}"><i
                                                                             class="fa fa-edit" aria-hidden="true"></i>
                                                                         Edit</a>
                                                                 </li>
@@ -91,7 +92,7 @@
         const deleteUser = (id) => {
             if (confirm("Are you sure you want to delete?")) {
                 $.ajax({
-                    url: '{{ route('admin.destroy') }}',
+                    url: '{{ route('admin.users.destroy') }}',
                     type: 'DELETE',
                     data: {
                         id: id
