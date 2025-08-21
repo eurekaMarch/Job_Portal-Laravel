@@ -14,7 +14,7 @@ class JobController extends Controller
     function index()
     {
 
-        $jobs = Job::orderBy('created_at', 'DESC')->with('user', 'applications')->paginate(10);
+        $jobs = Job::orderBy('created_at', 'DESC')->with(['user', 'applications'])->paginate(10);
 
         return view("admin.jobs.list", [
             'jobs' => $jobs
