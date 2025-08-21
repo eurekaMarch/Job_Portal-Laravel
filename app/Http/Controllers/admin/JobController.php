@@ -70,6 +70,8 @@ class JobController extends Controller
                 'company_name' => $request->company_name,
                 'company_location' => $request->company_location,
                 'company_website' => $request->company_website,
+                'status' => $request->status,
+                'isFeatured' => (!empty($request->isFeatured)) ? $request->isFeatured : 0,
             ];
 
             Job::where('id', $jobId)->update($data);
