@@ -35,6 +35,10 @@ Route::group(['prefix' => 'account'], function () {
         Route::post('/submit-register', [AccountController::class, 'submitRegistration'])->name("submitRegistration");
         Route::get('/login', [AccountController::class, 'login'])->name("login");
         Route::post('/authenticate', [AccountController::class, 'authenticate'])->name("authenticate");
+        Route::get('/forgot-password', [AccountController::class, 'forgotPassword'])->name("forgotPassword");
+        Route::post('/process-forgot-password', [AccountController::class, 'processForgotPassword'])->name("processForgotPassword");
+        Route::get('/reset-password/{token}', [AccountController::class, 'resetPassword'])->name("resetPassword");
+        Route::post('/process-reset-password', [AccountController::class, 'processResetPassword'])->name("processResetPassword");
     });
 
     Route::group(['middleware' => 'auth'], function () {
