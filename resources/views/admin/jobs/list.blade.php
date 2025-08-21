@@ -72,7 +72,8 @@
                                                                             class="fa fa-edit" aria-hidden="true"></i>
                                                                         Edit</a>
                                                                 </li>
-                                                                <li><a class="dropdown-item" {{-- onclick="deleteUser({{ $item->id }})" --}}><i
+                                                                <li><a class="dropdown-item"
+                                                                        onclick="deleteJob({{ $item->id }})"><i
                                                                             class="fa fa-trash" aria-hidden="true"></i>
                                                                         Delete</a></li>
                                                             </ul>
@@ -99,17 +100,17 @@
 
 @section('customJs')
     <script>
-        const deleteUser = (id) => {
+        const deleteJob = (id) => {
             if (confirm("Are you sure you want to delete?")) {
                 $.ajax({
-                    url: '{{ route('admin.users.destroy') }}',
+                    url: '{{ route('admin.jobs.destroy') }}',
                     type: 'DELETE',
                     data: {
                         id: id
                     },
                     dataType: 'json',
                     success: function(response) {
-                        window.location.href = "{{ route('admin.users') }}";
+                        window.location.href = "{{ route('admin.jobs') }}";
                     }
                 })
             }
